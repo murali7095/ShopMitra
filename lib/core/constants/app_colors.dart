@@ -1,6 +1,24 @@
 import 'package:flutter/material.dart';
 class AppColorConstants {
   //static const Color appMainColorBlue = Color(0xFF004AAD);
+
+  // Light Background Shades
+  static const bg_light = Color(0xFFF7F7F7);        // very light grey / white
+  static const bg_cream = Color(0xFFE7E4E0);        // soft cream / card background
+  static const bg_beige = Color(0xFFD5CEC7);        // muted beige
+
+// Brown / Warm Neutral Shades
+  static const brown_soft = Color(0xFFBFB1A7);      // soft warm brown
+  static const brown_light = Color(0xFFB49885);     // light brown (product details)
+  static const brown_medium = Color(0xFF947766);    // medium button brown
+  static const brown_dark = Color(0xFF6F5242);      // deep brown
+
+// Dark Elements / Icons / Footer
+  static const dark_charcoal = Color(0xFF261F22);   // almost black (footer)
+
+
+
+
   static const Color mainColor = Color(0xFF191970);
   static const Color secondaryColor = Color(0xFF2EE4D4);
   static const Color hintColor = Color(0xFFB9B9B9);

@@ -8,7 +8,7 @@ class ApiClient {
 
   ApiClient({http.Client? client}) : httpClient = client ?? http.Client();
 
-  Future<Map<String, dynamic>> post(String endpoint, Map<String, dynamic> data) async {
+  Future<http.Response> post(String endpoint, Map<String, dynamic> data) async {
     final uri = Uri.parse('${ApiEndpoints.baseUrl}$endpoint');
 
     try {
@@ -26,12 +26,12 @@ class ApiClient {
     }
   }
 
-  Future<Map<String, dynamic>> get(String endpoint) async {
+  Future<http.Response> get(String endpoint) async {
     final uri = Uri.parse('${ApiEndpoints.baseUrl}$endpoint');
 
     try {
       final response = await httpClient.get(
-        uri,
+        Uri.parse(endpoint),
         headers: {'Accept': 'application/json'},
       );
 
@@ -43,17 +43,17 @@ class ApiClient {
     }
   }
 
-  Map<String, dynamic> _processResponse(http.Response response) {
+  http.Response  _processResponse(http.Response response) {
     final statusCode = response.statusCode;
     final body = response.body;
 
     if (statusCode == 200) {
-      final jsonBody = jsonDecode(body);
-      if (jsonBody is Map<String, dynamic>) {
-        return jsonBody;
-      } else {
-        throw AppException('Invalid response format');
-      }
+      // final jsonBody = jsonDecode(body);
+      // if (jsonBody is Map<String, dynamic>) {
+        return response;
+      // } else {
+      //   throw AppException('Invalid response format');
+      // }
     } else if (statusCode == 400) {
       throw BadRequestException('Bad request: ${_extractMessage(body)}');
     } else if (statusCode == 401) {

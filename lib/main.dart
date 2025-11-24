@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:shop_mitra/core/network/api_client.dart';
+import 'package:shop_mitra/feature/authentication/data/model/login_model.dart';
 import 'package:shop_mitra/feature/authentication/presentation/screens/login_screen.dart';
+import 'package:shop_mitra/feature/dashboard/data/data_source/dashboard_data_source.dart';
+import 'package:shop_mitra/feature/dashboard/presentation/screens/dashboard_screen.dart';
 
+import 'feature/authentication/domain/entitites/login_entity.dart';
+import 'feature/authentication/presentation/controllers/login_controller.dart';
+import 'package:http/http.dart' as http;
 void main() {
   runApp(const MyApp());
+  DashboardDataSourceImpl(client: ApiClient(client: http.Client())).fetchAllProducts(allProductsUrl: "https://fakestoreapi.com/products");
+  // Auth provider for managing the state
+  // final authProvider = StateNotifierProvider<AuthNotifier, AsyncValue<LoginEntity?>>(
+  //       (ref) => AuthNotifier(ref),
+  // );
+  // ref.
+  //AuthNotifier().login(LoginModel(email: email, password: password, mobile: mobile))
 }
 
 class MyApp extends StatelessWidget {
@@ -34,7 +49,7 @@ class MyApp extends StatelessWidget {
           // tested with just a hot reload.
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: const LoginScreen(),
+        home: const DashboardScreen(),
       ),
     );
   }
