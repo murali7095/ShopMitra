@@ -16,7 +16,6 @@ abstract class DashboardDataSource {
 }
 
 class DashboardDataSourceImpl implements DashboardDataSource {
-  //final String url;
   final ApiClient client;
 
   DashboardDataSourceImpl({required this.client});
@@ -31,17 +30,11 @@ class DashboardDataSourceImpl implements DashboardDataSource {
         final jsonData = json.decode(response.body);
 
         final List<Product> allProducts = listFromJson(jsonData);
-        debugPrint("the success ${allProducts.length}");
         return Right(allProducts);
-
       } else {
-        debugPrint("Failure ${response.statusCode}");
-
         return Left(AppException("Failure ${response.statusCode}"));
       }
     } catch (e) {
-      debugPrint("Failure catch ${e.toString()}");
-
       return Left(AppException("Failure ${e.toString()}"));
     }
   }
