@@ -8,7 +8,10 @@ class ApiClient {
 
   ApiClient({http.Client? client}) : httpClient = client ?? http.Client();
 
-  Future<http.Response> post(String endpoint, Map<String, dynamic> data) async {
+  Future<http.Response> post(
+      String endpoint,
+      Map<String, dynamic> data,
+      ) async {
     final uri = Uri.parse('${ApiEndpoints.baseUrl}$endpoint');
 
     try {
@@ -19,10 +22,12 @@ class ApiClient {
       );
 
       return _processResponse(response);
+    } on AppException {
+      rethrow;
     } on http.ClientException catch (e) {
-      throw NetworkException('Client error: ${e.message}');
+      throw NetworkException(e.message);
     } catch (e) {
-      throw AppException('Unexpected error: ${e.toString()}');
+      throw AppException('Unexpected error: $e');
     }
   }
 
@@ -31,48 +36,52 @@ class ApiClient {
 
     try {
       final response = await httpClient.get(
-        Uri.parse(endpoint),
+        uri,
         headers: {'Accept': 'application/json'},
       );
 
       return _processResponse(response);
+    } on AppException {
+      rethrow;
     } on http.ClientException catch (e) {
-      throw NetworkException('Client error: ${e.message}');
+      throw NetworkException(e.message);
     } catch (e) {
-      throw AppException('Unexpected error: ${e.toString()}');
+      throw AppException('Unexpected error: $e');
     }
   }
 
-  http.Response  _processResponse(http.Response response) {
+  http.Response _processResponse(http.Response response) {
     final statusCode = response.statusCode;
     final body = response.body;
 
-    if (statusCode == 200) {
-      // final jsonBody = jsonDecode(body);
-      // if (jsonBody is Map<String, dynamic>) {
-        return response;
-      // } else {
-      //   throw AppException('Invalid response format');
-      // }
-    } else if (statusCode == 400) {
-      throw BadRequestException('Bad request: ${_extractMessage(body)}');
-    } else if (statusCode == 401) {
-      throw AuthenticationException('Unauthorized: ${_extractMessage(body)}');
-    } else if (statusCode == 403) {
-      throw ForbiddenException('Forbidden: ${_extractMessage(body)}');
-    } else if (statusCode == 404) {
-      throw NotFoundException('Not found: ${_extractMessage(body)}');
-    } else if (statusCode >= 500 && statusCode < 600) {
-      throw ServerException('Server error ($statusCode): ${_extractMessage(body)}');
-    } else {
-      throw AppException('Unexpected error ($statusCode): ${_extractMessage(body)}');
+    if (statusCode >= 200 && statusCode < 300) {
+      return response;
+    }
+
+    final message = _extractMessage(body);
+
+    switch (statusCode) {
+      case 400:
+        throw BadRequestException(message);
+      case 401:
+        throw AuthenticationException(message);
+      case 403:
+        throw ForbiddenException(message);
+      case 404:
+        throw NotFoundException(message);
+      default:
+        if (statusCode >= 500) {
+          throw ServerException(message);
+        }
+        throw AppException('Unexpected error ($statusCode): $message');
     }
   }
 
   String _extractMessage(String responseBody) {
     try {
       final jsonBody = jsonDecode(responseBody);
-      if (jsonBody is Map<String, dynamic> && jsonBody.containsKey('message')) {
+      if (jsonBody is Map<String, dynamic> &&
+          jsonBody.containsKey('message')) {
         return jsonBody['message'].toString();
       }
       return responseBody;

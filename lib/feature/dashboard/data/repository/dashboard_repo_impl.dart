@@ -10,21 +10,14 @@ class DashboardRepoImpl implements DashboardRepository {
   DashboardRepoImpl({required this.productsRepoImpl});
 
   @override
-  Future<Either<AppException, List<Product>>> fetchAllProducts({
+  Future<Either<AppException, List<ProductModel>>> fetchAllProducts({
     required String allProductsUrl,
   }) async {
     try {
       final response = await productsRepoImpl.fetchAllProducts(
         allProductsUrl: allProductsUrl,
       );
-      return response.fold(
-        (l) {
-          return Left(l);
-        },
-        (r) {
-          return Right(r);
-        },
-      );
+      return Right(response);
     } catch (e) {
       return Left(AppException(e.toString()));
     }

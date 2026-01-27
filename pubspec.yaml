@@ -42,6 +42,9 @@ dependencies:
   flutter_svg: ^2.0.10+1
   google_fonts: ^6.3.2
   flutter_native_splash: ^2.4.6
+  iconsax_flutter: ^1.0.1
+  shimmer: ^3.0.0
+  skeleton_text: ^3.0.1
 
 dev_dependencies:
   flutter_test:

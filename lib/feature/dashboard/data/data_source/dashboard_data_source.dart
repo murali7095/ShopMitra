@@ -1,18 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
-import 'package:dartz/dartz.dart';
 import 'package:shop_mitra/core/exceptions/app_exceptions.dart';
 import 'package:shop_mitra/feature/dashboard/data/model/product.dart';
 
 import '../../../../core/network/api_client.dart';
 
 abstract class DashboardDataSource {
-  Future<Either<AppException, List<Product>>> fetchAllProducts({
-    required String allProductsUrl,
-  });
+  Future<List<ProductModel>> fetchAllProducts({required String allProductsUrl});
 }
 
 class DashboardDataSourceImpl implements DashboardDataSource {
@@ -21,21 +15,25 @@ class DashboardDataSourceImpl implements DashboardDataSource {
   DashboardDataSourceImpl({required this.client});
 
   @override
-  Future<Either<AppException, List<Product>>> fetchAllProducts({
+  Future<List<ProductModel>> fetchAllProducts({
     required String allProductsUrl,
   }) async {
     try {
-      final http.Response response = await client.get(allProductsUrl);
+      final response = await client.get(allProductsUrl);
+
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
-
-        final List<Product> allProducts = listFromJson(jsonData);
-        return Right(allProducts);
+        return productsList(jsonData);
       } else {
-        return Left(AppException("Failure ${response.statusCode}"));
+        throw AppException(
+          "Server error: ${response.statusCode}",
+        );
       }
+    } on AppException {
+      rethrow; // keep original exception
     } catch (e) {
-      return Left(AppException("Failure ${e.toString()}"));
+      throw AppException("Unexpected error: $e");
     }
   }
+
 }
