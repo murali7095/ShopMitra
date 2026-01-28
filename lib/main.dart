@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shop_mitra/feature/dashboard/presentation/screens/dashboard_screen.dart';
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
  // DashboardDataSourceImpl(client: ApiClient(client: http.Client())).fetchAllProducts(allProductsUrl: "https://fakestoreapi.com/products");
   // Auth provider for managing the state
