@@ -1,45 +1,29 @@
-List<Product> listFromJson(List<dynamic> json) =>
-    json.map((item) => Product.fromJson(item)).toList();
+import 'package:shop_mitra/feature/dashboard/domain/entity/product.dart';
 
-class Product {
-  final int id;
-  final String title;
-  final num price;
-  final String description;
-  final String category;
-  final String image;
-  final ProductRating productRating;
+List<ProductModel> productsList(List<dynamic> json) =>
+    json.map((item) => ProductModel.fromJson(item)).toList();
 
-  Product({
-    required this.id,
-    required this.title,
-    required this.price,
-    required this.description,
-    required this.category,
-    required this.image,
-    required this.productRating,
-  });
+class ProductModel extends Product{
+  ProductModel({required super.id, required super.title, required super.price, required super.description, required super.category, required super.image, required super.productRating});
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
+    return ProductModel(
       id: json["id"] ?? 0,
       title: json["title"] ?? '--',
       price: json["price"] ?? 0,
       description: json["description"] ??'--',
       category: json["json"] ?? '--',
       image: json["image"] ?? '--',
-      productRating: ProductRating.fromJson(json["rating"] ?? {}) ,
+      productRating: ProductRatingModel.fromJson(json["rating"] ?? {}) ,
     );
   }
 }
 
-class ProductRating {
-  final num rate;
-  final int count;
-
-  ProductRating({required this.rate, required this.count});
-
-  factory ProductRating.fromJson(Map<String, dynamic> json) {
-    return ProductRating(rate: json["rate"], count: json["count"]);
+class ProductRatingModel extends ProductRating {
+  ProductRatingModel({required super.rate, required super.count});
+  factory ProductRatingModel.fromJson(Map<String, dynamic> json) {
+    return ProductRatingModel(rate: json["rate"] ?? 0, count: json["count"]?? 0);
   }
+
+
 }

@@ -261,11 +261,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           heading: "Continue with Google",
 
                           logoPath:
-                              "assets/images/branding_guideline_sample_lt_rd_sl.svg",
+                              "assets/image/branding_guideline_sample_lt_rd_sl.svg",
                         ),
                         loginOptionsWidget(
                           heading: "Continue with Apple",
-                          logoPath: "assets/images/Apple_logo_black.svg",
+                          logoPath: "assets/image/Apple_logo_black.svg",
                           logoColor: Colors.black87,
                         ),
                         SizedBox(height: 60,),
