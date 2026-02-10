@@ -1,3 +1,11 @@
+import org.gradle.api.file.Directory
+import org.gradle.api.tasks.Delete
+
+plugins {
+    // Add the dependency for the Google services Gradle plugin
+    id("com.google.gms.google-services") version "4.4.4" apply false
+}
+
 allprojects {
     repositories {
         google()

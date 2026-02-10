@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "952540307478",
+    "project_id": "shop-mitra-3399f",
+    "storage_bucket": "shop-mitra-3399f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952540307478:android:dc8a132834608ff9cb9537",
+        "android_client_info": {
+          "package_name": "com.example.shop_mitra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr42rN9IKpR0_y_vCJSldGt9pH1Ah0Xjg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
