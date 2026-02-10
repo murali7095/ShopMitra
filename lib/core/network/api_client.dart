@@ -12,7 +12,7 @@ class ApiClient {
       String endpoint,
       Map<String, dynamic> data,
       ) async {
-    final uri = Uri.parse('${ApiEndpoints.baseUrl}$endpoint');
+    final uri = Uri.parse(endpoint);
 
     try {
       final response = await httpClient.post(

@@ -7,9 +7,10 @@ import 'package:shop_mitra/core/common_widget/custom_elevated_button.dart';
 import 'package:shop_mitra/core/constants/app_colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shop_mitra/core/utils/validators.dart';
+import 'package:shop_mitra/feature/authentication/data/model/login_model.dart';
+import 'package:shop_mitra/feature/authentication/domain/entitites/auth_entity.dart';
 
-import '../../domain/entitites/login_entity.dart';
-import '../controllers/login_controller.dart';
+ import '../controllers/login_controller.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -19,18 +20,14 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _mobileController = TextEditingController();
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _mobileController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     debugPrint("called build");
-    final authProvider =
-        StateNotifierProvider<AuthNotifier, AsyncValue<LoginEntity?>>(
-          (ref) => AuthNotifier(ref),
-        );
     final bool isPasswordObscured = ref.watch(togglePassword);
     final bool isChecked = ref.watch(toggleRememberMe);
     final authState = ref.watch(authProvider);
@@ -93,7 +90,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                         ),
                         SizedBox(height: 8),
-                        headerText("Mobile"),
+                       /* headerText("Mobile"),
                         AppTextFormField(
                           errorText: mobileError,
                           textInputType: TextInputType.number,
@@ -111,7 +108,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 8),
+                        SizedBox(height: 8),*/
                         headerText("Email"),
                         AppTextFormField(
                           errorText: emailError,
@@ -198,10 +195,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           title: 'Sign in',
                           onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
-                              if (mobileError == null &&
-                                  passwordError == null &&
+                              if (passwordError == null &&
                                   emailError == null) {
                                 debugPrint("Mobile passed");
+                                final loginModel = LoginModel(email: _emailController.text, password: _passwordController.text, returnSecureToken: true);
+                                ref.read(authProvider.notifier).login(loginModel);
                               } else {
                                 debugPrint(
                                   "the controller ${_mobileController.text}, and error $mobileError",
@@ -276,7 +274,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               );
             },
             error: (error, stackTrace) {
-              return Center(child: Text("error"));
+              return Center(child: Text("error ${error.toString()}"));
             },
             loading: () => CircularProgressIndicator(),
           ),
