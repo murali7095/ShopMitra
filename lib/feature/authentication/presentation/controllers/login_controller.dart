@@ -10,6 +10,8 @@ import 'package:shop_mitra/feature/authentication/data/model/login_model.dart';
 import 'package:shop_mitra/feature/authentication/domain/entitites/auth_entity.dart';
 import 'package:shop_mitra/feature/authentication/presentation/controllers/login_dependencies.dart';
 
+import 'auth_controller.dart';
+
 
 
 final togglePassword = StateProvider<bool>((ref) {
@@ -39,8 +41,10 @@ final bootstrapAuthProvider = FutureProvider<void>((ref) async {
 });
 
 
-final authTokenProvider = StateProvider<String>((ref) => '');
-
+final authTokenProvider = StateProvider<String>((ref) {
+  final box = Hive.box('authBox');
+  return box.get('token', defaultValue: '') as String;
+});
 
 final authenticationControllerProvider =
 AsyncNotifierProvider<
@@ -105,6 +109,8 @@ class AuthenticationController
 
         ref.read(authTokenProvider.notifier).state =
             userModel.idToken;
+        ref.read(authProvider.notifier).setToken(userModel.idToken);
+
 
         return AsyncData(loginEntity);
       },
