@@ -1,209 +1,133 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:shop_mitra/core/common_widget/app_text_widget.dart';
 import 'package:shop_mitra/core/constants/app_colors.dart';
-import 'package:shop_mitra/feature/dashboard/data/model/product.dart';
 import 'package:shop_mitra/feature/dashboard/presentation/notifier/dashboard_controller.dart';
+import 'package:shop_mitra/feature/dashboard/presentation/screens/widgets/ads_carousel_widget.dart';
+import 'package:shop_mitra/feature/dashboard/presentation/screens/widgets/app_header.dart';
+import 'package:shop_mitra/feature/dashboard/presentation/screens/widgets/category_widget.dart';
+import 'package:shop_mitra/feature/dashboard/presentation/screens/widgets/search_widget.dart';
 
-import '../notifier/products_notifier.dart';
+import '../../domain/entity/product.dart';
+import 'widgets/product_item_widget.dart';
 
-class DashboardScreen extends ConsumerWidget {
+class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+  int _currentIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
     final products = ref.watch(productsNotifierProvider);
+
+    final List<Widget> _pages = [
+      _homePage(products),
+      const Center(child: Text("Search")),
+      const Center(child: Text("Cart")),
+      const Center(child: Text("Profile")),
+    ];
+
     return Scaffold(
+      extendBody: true,
       backgroundColor: AppColorConstants.foundationWhite,
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: CustomScrollView(
-          slivers: [
-            AppHeader(),
-            SearchWidget(),
-            SliverPadding(
-              padding: EdgeInsets.only(top: 12, left: 8, right: 8),
-              sliver: products.when(
-                loading: () => const SliverToBoxAdapter(
-                  child: Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(24),
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                ),
-                error: (error, _) => SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(error.toString()),
-                  ),
-                ),
-                data: (data) => SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                      final item = data[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        child: Text(item.title),
-                      );
-                    },
-                    childCount: data.length,
-                  ),
-                ),
-              ),
-            ),
 
-          ],
-        ),
-      ),
-    );
-  }
-}
+      body: _pages[_currentIndex],
 
-class SearchWidget extends StatelessWidget {
-  const SearchWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: EdgeInsets.only(top: 12, left: 8, right: 8),
-      sliver: SliverToBoxAdapter(
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.all(1),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: AppColorConstants.foundationWhite,
-                  border: Border.all(
-                    color: AppColorConstants.brown_medium,
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(width: 12),
-                    Icon(
-                      Icons.search_rounded,
-                      color: AppColorConstants.brown_medium,
-                      size: 35,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    Expanded(
-                      child: TextFormField(
-                        maxLines: 1,
-                        decoration: InputDecoration(
-                          hint: AppTextWidget(
-                            fontSize: 20,
-                            text: "Search",
-                            fontWeight: FontWeight.w400,
-                            color: AppColorConstants.brown_dark,
-                          ),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 12),
-              padding: EdgeInsets.all(7.5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: AppColorConstants.brown_medium,
-              ),
-              child: Icon(
-                Icons.filter_list_outlined,
-                color: AppColorConstants.foundationWhite,
-                size: 35,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AppHeader extends StatelessWidget {
-  const AppHeader({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverAppBar(
-      backgroundColor: AppColorConstants.foundationWhite,
-      pinned: true,
-      // expandedHeight: 200,
-      floating: false,
-      actions: [
-        Container(
-          margin: EdgeInsets.only(right: 16),
-          padding: EdgeInsets.all(8),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColorConstants.bg_cream,
-          ),
-          child: Icon(
-            Icons.notification_add_sharp,
-            color: AppColorConstants.black121212,
-          ),
-        ),
-      ],
-      title: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppTextWidget(
-            text: "Location",
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: AppColorConstants.black000000,
-          ),
-          SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.location_on_rounded,
-                color: AppColorConstants.brown_dark,
-                size: 30,
-              ),
-              SizedBox(width: 4),
-              AppTextWidget(
-                text: "HYDERABAD, INDIA",
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-                color: AppColorConstants.black000000,
-              ),
-              SizedBox(width: 4),
-              Icon(
-                Icons.keyboard_arrow_down,
-                color: AppColorConstants.black000000,
-                size: 30,
+            color: AppColorConstants.foundationWhite.withOpacity(0.9),
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 15,
+                spreadRadius: 2,
               ),
             ],
           ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _navItem(Icons.home, "Home", 0),
+              _navItem(Icons.search, "Search", 1),
+              _navItem(Icons.shopping_bag, "Cart", 2),
+              _navItem(Icons.person, "Account", 3),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  Widget _navItem(IconData icon, String label, int index) {
+    final isSelected = _currentIndex == index;
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _currentIndex = index;
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AppColorConstants.mainColor.withOpacity(0.1)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: isSelected
+                  ? AppColorConstants.mainColor
+                  : Colors.grey,
+            ),
+            if (isSelected) ...[
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: TextStyle(
+                  color: AppColorConstants.mainColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ]
+          ],
+        ),
+      ),
+    );
+  }
+
+  ///
+  Widget _homePage(AsyncValue<List<Product>> products) {
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: CustomScrollView(
+        slivers: [
+          AppHeader(),
+          SearchWidget(),
+          SliverPadding(
+            padding: const EdgeInsets.only(top: 12, left: 8, right: 8),
+            sliver: AdsCarousel(),
+          ),
+          CategoryWidget(),
+          ProductItem(products: products),
         ],
       ),
     );
   }
 }
-
-
 
 /* SliverPadding(
               padding: EdgeInsets.only(top: 12, left: 8, right: 8),

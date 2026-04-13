@@ -8,6 +8,7 @@ import 'package:shop_mitra/feature/dashboard/data/repository/dashboard_repo_impl
 import 'package:shop_mitra/feature/dashboard/domain/use_case/dashboard_use_case.dart';
 
 import '../../../../core/network/api_client.dart';
+import '../../domain/entity/categoty.dart';
 import '../../domain/entity/product.dart';
 
 final productNotifierProvider =
@@ -27,7 +28,13 @@ final productNotifierProvider =
     });
 
 
-
+final categoryList = [
+  Category(name: "All", icon: "assets/image/categories/grid.png"),
+  Category(name: "Top", icon: "assets/image/categories/casual-t-shirt-.png"),
+  Category(name: "Bottoms", icon: "assets/image/categories/pants.png"),
+  Category(name: "Dresses", icon: "assets/image/categories/dress.png"),
+  Category(name: "Jewelry", icon: "assets/image/categories/jewelry.png"),
+];
 
 
 class ProductNotifier extends StateNotifier<AsyncValue<List<Product>>> {

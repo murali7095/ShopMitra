@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shop_mitra/feature/authentication/presentation/pin_code_login/pin_provider.dart';
 
+import '../../../../core/app_navigations/route_constants.dart';
 import '../../../../core/common_widget/app_text_widget.dart';
 import '../../../../core/common_widget/custom_elevated_button.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../controllers/auth_controller.dart';
 import 'create_pin_screen.dart';
 class PinVerificationScreen extends ConsumerStatefulWidget {
   const PinVerificationScreen({super.key});
@@ -73,16 +75,18 @@ class _PinVerificationScreenState
                   child: buildPinCodeTextField(
                     key: "user_pin",
                     context: context,
-                    onChanged: (v) {
-                      ref
-                          .read(pinVerificationProvider.notifier)
-                          .updateUserPin(v);
-                      state.userPin.length == 4 &&
-                          state.userPin == state.localPin
-                          ? () {
-                        context.go('/dashboard');
-                      }:null;
-                    },
+                      onChanged: (v) {
+                        ref.read(pinVerificationProvider.notifier)
+                            .updateUserPin(v);
+
+                        if (v.length == 4 &&
+                            v == state.localPin) {
+
+                          ref.read(authProvider.notifier)
+                              .setPinVerificationStatus(true);
+                        }
+                      },
+
 
                   ),
                 ),
@@ -94,9 +98,11 @@ class _PinVerificationScreenState
                     onPressed: state.userPin.length == 4 &&
                         state.userPin == state.localPin
                         ? () {
-                      context.go('/dashboard');
+                      ref.read(authProvider.notifier)
+                          .setPinVerificationStatus(true);
                     }
                         : null,
+
                   ),
                 ),
               ],

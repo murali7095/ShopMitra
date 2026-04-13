@@ -80,7 +80,7 @@ class _CreatePinScreenState extends ConsumerState<CreatePinScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 12, right: 12, top: 40),
+                  padding: EdgeInsets.only(left: 18, right: 12, top: 40),
                   child: AppTextWidget(
                     text: AuthConstants.enterNewPin,
                     textAlign: TextAlign.left,
@@ -107,7 +107,7 @@ class _CreatePinScreenState extends ConsumerState<CreatePinScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 12, right: 12, top: 10),
+                  padding: EdgeInsets.only(left: 18, right: 12, top: 10),
                   child: AppTextWidget(
                     text: AuthConstants.confirmPin,
                     textAlign: TextAlign.center,
@@ -173,6 +173,7 @@ PinCodeTextField buildPinCodeTextField({
     appContext: context,
     length: 4,
     obscureText: true,
+    keyboardType: TextInputType.number,
     blinkWhenObscuring: false,
     pinTheme: PinTheme(
       shape: PinCodeFieldShape.box,
