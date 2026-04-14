@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:hive/hive.dart';
@@ -45,6 +46,15 @@ final authTokenProvider = StateProvider<String>((ref) {
   final box = Hive.box('authBox');
   return box.get('token', defaultValue: '') as String;
 });
+
+/*final appInstallationStatusProvider = StateProvider<bool>((ref) {
+  final pinBox = Hive.box('pinBox');
+
+  // Get 'isJustInstalled' key, default to false
+  final isJustInstalled = pinBox.get('isJustInstalled', defaultValue: false) as bool;
+
+  return isJustInstalled;
+});*/
 
 final authenticationControllerProvider =
 AsyncNotifierProvider<

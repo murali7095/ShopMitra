@@ -27,7 +27,7 @@ class ProductsNotifier extends AsyncNotifier<List<Product>> {
   @override
   Future<List<Product>> build() async {
     // You can make the URL configurable if needed
-    const allProductsUrl = "https://fakestoreapi.com/products";
+    const allProductsUrl = "/products";
 
     // Read your use case from DI
     final fetchProducts = ref.read(fetchProductsProvider);
@@ -44,4 +44,16 @@ class ProductsNotifier extends AsyncNotifier<List<Product>> {
     );
   }
 }
+
+final adsProvider = Provider<List<String>>((ref) => ads,);
+const ads=   [
+    "https://images.unsplash.com/photo-1483985988355-763728e1935b",
+    "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+    "https://images.unsplash.com/photo-1608231387042-66d1773070a5",
+    "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
+    "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c",
+    "https://images.unsplash.com/photo-1519741497674-611481863552"
+  ];
+
+
 

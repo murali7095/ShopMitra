@@ -31,8 +31,8 @@ class ApiClient {
     }
   }
 
-  Future<http.Response> get(String endpoint) async {
-    final uri = Uri.parse('${ApiEndpoints.baseUrl}$endpoint');
+  Future<http.Response> get(String endpoint,{String? otherUrl}) async {
+    final uri = Uri.parse('${ otherUrl ?? ApiEndpoints.baseUrl}$endpoint');
 
     try {
       final response = await httpClient.get(
@@ -84,9 +84,10 @@ class ApiClient {
           jsonBody.containsKey('message')) {
         return jsonBody['message'].toString();
       }
-      return responseBody;
+      return "Something went wrong";
     } catch (_) {
-      return responseBody;
+      return "Something went wrong";
     }
   }
+
 }

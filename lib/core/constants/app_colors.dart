@@ -1,6 +1,28 @@
 import 'package:flutter/material.dart';
 class AppColorConstants {
   //static const Color appMainColorBlue = Color(0xFF004AAD);
+  static const Color mainColor = Color(0xFF4A8281);       // Teal (Primary)
+  static const Color secondaryColor = Color(0xFFEFF5F4);  // Light background teal
+  static const Color accentColor = Color(0xFF377171);     // Button color (darker teal)
+  static const Color lightGray = Color(0xFFF5F5F5); // light grey
+
+  static const Color textPrimary = Color(0xFF2C3A3A);     // Dark text
+  static const Color textSecondary = Color(0xFF6E8A89);   // Subtle text
+  static const Color textFieldBackground = Color(0xFF7FA7A4); // main fill
+  static const Color textFieldOverlay = Color(0x33FFFFFF);    // slight white opacity (for softness)
+  static const Color textFieldText = Color(0xFFFFFFFF);   // white text
+  static const Color textFieldHint = Color(0xCCFFFFFF);   // slightly faded white
+  static const Color backgroundColor = Color(0xFFFFFFFF); // White background
+  static const Color cardColor = Color(0xFFF6FAF9);       // Card background
+
+  static const Color borderColor = Color(0xFFE0E7E6);     // Light border
+  static const Color iconColor = Color(0xFF4A8281);       // Icon tint
+
+  static const Color black = Color(0xFF000000);
+  static const Color white = Color(0xFFFFFFFF);
+
+
+
 
   // Light Background Shades
   static const bg_light = Color(0xFFF7F7F7);        // very light grey / white
@@ -19,8 +41,8 @@ class AppColorConstants {
 
 
 
-  static const Color mainColor = Color(0xFF191970);
-  static const Color secondaryColor = Color(0xFF2EE4D4);
+ // static const Color mainColor = Color(0xFF191970);
+  //static const Color secondaryColor = Color(0xFF2EE4D4);
   static const Color hintColor = Color(0xFFB9B9B9);
   static const Color lightBlue = Color(0xFFE6F0FF); // For backgrounds or surfaces
   static const foundationWhite = Color(0xFFFFFFFF);
